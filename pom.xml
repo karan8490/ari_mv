@@ -177,7 +177,7 @@
 					<downloadSources>true</downloadSources>
 					<downloadJavadocs>true</downloadJavadocs>
 					<wtpversion>2.0</wtpversion>
-					<wtpContextName>spring4ajax</wtpContextName>
+					<wtpContextName>AgilityConnector</wtpContextName>
 				</configuration>
 			</plugin>
 			<plugin>
