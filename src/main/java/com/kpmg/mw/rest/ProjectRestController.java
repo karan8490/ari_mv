@@ -2,14 +2,13 @@ package com.kpmg.mw.rest;
 
 import java.util.Arrays;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +19,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.kpmg.mw.config.CommonConfigBean;
-import com.kpmg.mw.vo.ProjectVO;
 
 /**
  * This controller would contain all the REST APIs for Project resource
@@ -47,7 +45,7 @@ public class ProjectRestController {
 	 * @return
 	 */
 	@RequestMapping(value = "/project", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String projects() {
+	public ResponseEntity<?> projects() {
 
 		final String uriString = commonConfigBean.getCompleteRequestURI("project");
 		HttpHeaders headers = new HttpHeaders();
@@ -58,12 +56,10 @@ public class ProjectRestController {
 		try {
 			ResponseEntity<String> responseEntity = restTemplate.exchange(uriString, HttpMethod.GET, entity,
 					String.class);
-			String response = responseEntity.getBody();
-			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 
@@ -74,7 +70,7 @@ public class ProjectRestController {
 	 * @return
 	 */
 	@RequestMapping(value = "/project/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String projectDetails(@PathVariable("id") String id) {
+	public ResponseEntity<?> projectDetails(@PathVariable("id") String id) {
 
 		final String uriString = commonConfigBean.getCompleteRequestURI("project") + "/" + id;
 		HttpHeaders headers = new HttpHeaders();
@@ -85,17 +81,16 @@ public class ProjectRestController {
 		try {
 			ResponseEntity<String> responseEntity = restTemplate.exchange(uriString, HttpMethod.GET, entity,
 					String.class);
-			String response = responseEntity.getBody();
-			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
+
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 
 	@RequestMapping(value = "/topology", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String deploymentNames() {
+	public ResponseEntity<?> deploymentNames() {
 		final String uriString = commonConfigBean.getCompleteRequestURI("topology");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -105,17 +100,16 @@ public class ProjectRestController {
 		try {
 			ResponseEntity<String> responseEntity = restTemplate.exchange(uriString, HttpMethod.GET, entity,
 					String.class);
-			String response = responseEntity.getBody();
-			logger.debug("Received response as " + response);
-			return response;
+
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 
 	@RequestMapping(value = "/environment/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String workloadStatus(@PathVariable("id") String id) {
+	public ResponseEntity<?> workloadStatus(@PathVariable("id") String id) {
 		final String uriString = commonConfigBean.getCompleteRequestURI("environment") + "/" + id;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -127,10 +121,10 @@ public class ProjectRestController {
 					String.class);
 			String response = responseEntity.getBody();
 			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 

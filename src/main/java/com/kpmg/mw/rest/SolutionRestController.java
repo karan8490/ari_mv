@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +36,7 @@ public class SolutionRestController {
 	 * @return
 	 */
 	@RequestMapping(value = "/solution", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String deploymentNames() {
+	public ResponseEntity<?> deploymentNames() {
 		final String uriString = commonConfigBean.getCompleteRequestURI("solution");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -47,10 +48,10 @@ public class SolutionRestController {
 					String.class);
 			String response = responseEntity.getBody();
 			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 	
@@ -60,7 +61,7 @@ public class SolutionRestController {
 	 */
 
 	@RequestMapping(value = "/solutiondeployment", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String solutionDeployment() {
+	public ResponseEntity<?> solutionDeployment() {
 		final String uriString = commonConfigBean.getCompleteRequestURI("solutiondeployment");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -72,10 +73,10 @@ public class SolutionRestController {
 					String.class);
 			String response = responseEntity.getBody();
 			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 
@@ -85,7 +86,7 @@ public class SolutionRestController {
 	 * @return
 	 */
 	@RequestMapping(value = "/solutiondeployment/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String solutionDeploymentDetails(@PathVariable("id") String id) {
+	public ResponseEntity<?> solutionDeploymentDetails(@PathVariable("id") String id) {
 		final String uriString = commonConfigBean.getCompleteRequestURI("solutiondeployment") + "/" + id;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -97,10 +98,10 @@ public class SolutionRestController {
 					String.class);
 			String response = responseEntity.getBody();
 			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 
@@ -110,7 +111,7 @@ public class SolutionRestController {
 	 * @return
 	 */
 	@RequestMapping(value = "/solutiondeployment/{id}/deploy", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String deploySolution(@PathVariable("id") String id) {
+	public ResponseEntity<?> deploySolution(@PathVariable("id") String id) {
 		final String uriString = commonConfigBean.getCompleteRequestURI("solutiondeployment") + "/" + id + "/deploy";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -122,10 +123,10 @@ public class SolutionRestController {
 					String.class);
 			String response = responseEntity.getBody();
 			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 	
@@ -136,7 +137,7 @@ public class SolutionRestController {
 	 */
 
 	@RequestMapping(value = "/solutiondeployment/{id}/start", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String startSolution(@PathVariable("id") String id) {
+	public ResponseEntity<?> startSolution(@PathVariable("id") String id) {
 		final String uriString = commonConfigBean.getCompleteRequestURI("solutiondeployment") + "/" + id + "/start";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -148,10 +149,10 @@ public class SolutionRestController {
 					String.class);
 			String response = responseEntity.getBody();
 			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 	
@@ -162,7 +163,7 @@ public class SolutionRestController {
 	 */
 
 	@RequestMapping(value = "/solutiondeployment/{id}/stop", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String stopSolution(@PathVariable("id") String id) {
+	public ResponseEntity<?> stopSolution(@PathVariable("id") String id) {
 		final String uriString = commonConfigBean.getCompleteRequestURI("solutiondeployment") + "/" + id + "/stop";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -174,10 +175,10 @@ public class SolutionRestController {
 					String.class);
 			String response = responseEntity.getBody();
 			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 	
@@ -188,7 +189,7 @@ public class SolutionRestController {
 	 */
 
 	@RequestMapping(value = "/solutiondeployment/{id}/release", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String releaseSolution(@PathVariable("id") String id) {
+	public ResponseEntity<?> releaseSolution(@PathVariable("id") String id) {
 		final String uriString = commonConfigBean.getCompleteRequestURI("solutiondeployment") + "/" + id + "/release";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -200,10 +201,10 @@ public class SolutionRestController {
 					String.class);
 			String response = responseEntity.getBody();
 			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 
@@ -213,7 +214,7 @@ public class SolutionRestController {
 	 * @return
 	 */
 	@RequestMapping(value = "/solutiondeployment/{id}/approval", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String approveSolution(@PathVariable("id") String id) {
+	public ResponseEntity<?> approveSolution(@PathVariable("id") String id) {
 		final String uriString = commonConfigBean.getCompleteRequestURI("solutiondeployment") + "/" + id + "/approval";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -225,10 +226,10 @@ public class SolutionRestController {
 					String.class);
 			String response = responseEntity.getBody();
 			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 	/**
@@ -239,7 +240,7 @@ public class SolutionRestController {
 	 */
 
 	@RequestMapping(value = "/solutiondeployment/{id}/promote/{locationId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String promoteSolution(@PathVariable("id") String id, @PathVariable("locationId") String locationId) {
+	public ResponseEntity<?> promoteSolution(@PathVariable("id") String id, @PathVariable("locationId") String locationId) {
 		final String uriString = commonConfigBean.getCompleteRequestURI("solutiondeployment") + "/" + id + "/promote/"
 				+ locationId;
 		HttpHeaders headers = new HttpHeaders();
@@ -252,10 +253,10 @@ public class SolutionRestController {
 					String.class);
 			String response = responseEntity.getBody();
 			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 
@@ -265,7 +266,7 @@ public class SolutionRestController {
 	 * @return
 	 */
 	@RequestMapping(value = "/solutiondeployment/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String removeSolution(@PathVariable("id") String id) {
+	public ResponseEntity<?> removeSolution(@PathVariable("id") String id) {
 		final String uriString = commonConfigBean.getCompleteRequestURI("solutiondeployment") + "/" + id;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -277,10 +278,10 @@ public class SolutionRestController {
 					String.class);
 			String response = responseEntity.getBody();
 			logger.debug("Received response as " + response);
-			return response;
+			return responseEntity;
 		} catch (RestClientException e) {
 			logger.error(e.getMessage(), e);
-			return null;
+			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
 
