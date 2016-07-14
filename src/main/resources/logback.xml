@@ -52,7 +52,7 @@
 	</logger>
 
 
-	<logger name="com.kpmg" level="INFO" additivity="false">
+	<logger name="com.kpmg" level="DEBUG" additivity="false">
 		<appender-ref ref="APP-AUDIT" />
 	</logger>
 
