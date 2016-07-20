@@ -1,14 +1,8 @@
 package com.kpmg.mw.rest;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-
 import com.kpmg.mw.config.CommonConfigBean;
 
 /**
@@ -177,14 +170,16 @@ public class ProjectRestController {
 		JsonObject jsonObj = parser.parse(projectJson).getAsJsonObject();
 		JsonObject projectObj = new JsonObject();
 		
+		Gson gson = new Gson();
+		
 		if (jsonObj != null) {
 			logger.info("Project create Json is " + jsonObj.toString());
 			JsonObject parentObj = jsonObj.getAsJsonObject("parent");
 			if (parentObj != null) {
 				logger.debug("parent container value is " + parentObj.toString());
 				// get Project Name from the JSON object
-				String projName = jsonObj.get("name").toString();
-				String containerId = parentObj.get("id").toString();
+				String projName = jsonObj.get("name").getAsString();
+				String containerId = parentObj.get("id").getAsString();
 				
 				// Create JSON object as expected by the agility api
 				projectObj.addProperty("name", projName);
@@ -200,12 +195,13 @@ public class ProjectRestController {
 		}
 			
 		final String uriString = commonConfigBean.getCompleteRequestURI("project");
+		logger.debug("uri string formed as "+uriString);
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
-		HttpEntity<String> entity = new HttpEntity<String>(projectObj.toString(), headers);
+		HttpEntity<String> entity = new HttpEntity<String>(gson.toJson(projectObj), headers);
 
 		try {
 			ResponseEntity<String> responseEntity = restTemplate.exchange(uriString, HttpMethod.POST, entity,
