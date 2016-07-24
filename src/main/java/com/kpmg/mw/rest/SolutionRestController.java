@@ -303,6 +303,49 @@ public class SolutionRestController {
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * @param projectJson
+	 * @param req
+	 * @return
+Create Solution has following steps. 
+1	Create Runtime in each env – To create run time each env we need to get the env first. Get Project call returns environments Array (["name" : "Development", "name" : "Production", "name" : "UAT/Stagin/Demo"]) . And from there we can take out the ENV (I think we will need the env ID) and create runtime. For now put a check in the Env if the Env is 
+2	Create Runtime Command 
+POST https:<agility_ip>:8443/agility/api/<api_version>/environment/44/runtime
+
+3	Create the artifact 
+POST https:<agility_ip>:8443/agility/api/<api_version>/solution/23/artifact
+
+Once we create above items then we can create solution. Using below call.
+POST project/{id}/solution
+
+This is the json format for creating solution.
+{
+  
+    "name": "TestSolutionSach0724",
+    "description": "lq8",
+    "parent": { "id": "1244" }
+  
+}
+	 */
+	@RequestMapping(value = "/createsolution", method = RequestMethod.POST, consumes = "application/json")
+	public ResponseEntity<?> createSolution(@RequestBody String solJson, HttpServletRequest req) {
+		
+		logger.debug("Received json data to create Solution : " + solJson);
+		
+		/*	----- JSON INPUT -----
+		{
+		 * 		   "ProjectID": "1244",
+		 		   "SolutionType": "",
+				   "SolutionName": "TestSolution",
+				   "ArtifactName": "TestArtifact",
+				   "T-ShirtSize": "Small"
+				}
+				
+		*/		
+
+
+		return null;
+	}		
 	
 }
