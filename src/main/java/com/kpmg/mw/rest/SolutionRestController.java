@@ -285,4 +285,24 @@ public class SolutionRestController {
 		}
 	}
 
+	/**
+	 * Get solution types. This call returns the supported solution types in Agility.
+	 * @param 
+	 * @return Solution Types
+	 */
+	@RequestMapping(value = "/solutiontypes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<SolutionTypes> solutionTypes() {
+
+		try {
+			// Just return the Solution Types
+			return new ResponseEntity<SolutionTypes>(new SolutionTypes(), HttpStatus.OK);
+
+		} catch (RestClientException e) {
+			logger.error(e.getMessage(), e);
+			return null;
+		}
+	}
+	
+	
+	
 }

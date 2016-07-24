@@ -115,25 +115,6 @@ public class ProjectRestController {
 		}
 	}
 
-	@RequestMapping(value = "/environment/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> workloadStatus(@PathVariable("id") String id) {
-		final String uriString = commonConfigBean.getCompleteRequestURI("environment") + "/" + id;
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-		try {
-			ResponseEntity<String> responseEntity = restTemplate.exchange(uriString, HttpMethod.GET, entity,
-					String.class);
-			String response = responseEntity.getBody();
-			logger.debug("Received response as " + response);
-			return responseEntity;
-		} catch (RestClientException e) {
-			logger.error(e.getMessage(), e);
-			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-		}
-	}
 	/**
 	 * This is original Project creation JSON.
 	 *	{
