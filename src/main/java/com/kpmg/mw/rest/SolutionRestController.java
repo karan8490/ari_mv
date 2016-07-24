@@ -2,6 +2,8 @@ package com.kpmg.mw.rest;
 
 import java.util.Arrays;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +14,31 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.kpmg.mw.config.CommonConfigBean;
+import com.kpmg.mw.vo.SolutionTypes;
 
 @RestController
 public class SolutionRestController {
 
 	private Logger logger = LoggerFactory.getLogger(ProjectRestController.class);
+
+	@Autowired
+	private ProjectRestController projectRestController;
+
+	@Autowired
+	private EnvRestController envRestController;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -54,9 +69,10 @@ public class SolutionRestController {
 			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
-	
+
 	/**
-	 * Get all solution deployment 
+	 * Get all solution deployment
+	 * 
 	 * @return
 	 */
 
@@ -82,6 +98,7 @@ public class SolutionRestController {
 
 	/**
 	 * Get solution details by identifier
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -107,6 +124,7 @@ public class SolutionRestController {
 
 	/**
 	 * Deploy a solution
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -129,9 +147,10 @@ public class SolutionRestController {
 			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
-	
+
 	/**
 	 * Starts a solution
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -155,9 +174,10 @@ public class SolutionRestController {
 			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
-	
+
 	/**
 	 * Stops a solution
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -181,9 +201,10 @@ public class SolutionRestController {
 			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
-	
+
 	/**
 	 * Releases a solution
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -210,6 +231,7 @@ public class SolutionRestController {
 
 	/**
 	 * Approves a soution
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -232,15 +254,18 @@ public class SolutionRestController {
 			return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 		}
 	}
+
 	/**
 	 * Promotes a solution to other location
+	 * 
 	 * @param id
 	 * @param locationId
 	 * @return
 	 */
 
 	@RequestMapping(value = "/solutiondeployment/{id}/promote/{locationId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> promoteSolution(@PathVariable("id") String id, @PathVariable("locationId") String locationId) {
+	public ResponseEntity<?> promoteSolution(@PathVariable("id") String id,
+			@PathVariable("locationId") String locationId) {
 		final String uriString = commonConfigBean.getCompleteRequestURI("solutiondeployment") + "/" + id + "/promote/"
 				+ locationId;
 		HttpHeaders headers = new HttpHeaders();
@@ -262,6 +287,7 @@ public class SolutionRestController {
 
 	/**
 	 * Removes a solution
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -286,8 +312,10 @@ public class SolutionRestController {
 	}
 
 	/**
-	 * Get solution types. This call returns the supported solution types in Agility.
-	 * @param 
+	 * Get solution types. This call returns the supported solution types in
+	 * Agility.
+	 * 
+	 * @param
 	 * @return Solution Types
 	 */
 	@RequestMapping(value = "/solutiontypes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -302,50 +330,72 @@ public class SolutionRestController {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param projectJson
 	 * @param req
-	 * @return
-Create Solution has following steps. 
-1	Create Runtime in each env – To create run time each env we need to get the env first. Get Project call returns environments Array (["name" : "Development", "name" : "Production", "name" : "UAT/Stagin/Demo"]) . And from there we can take out the ENV (I think we will need the env ID) and create runtime. For now put a check in the Env if the Env is 
-2	Create Runtime Command 
-POST https:<agility_ip>:8443/agility/api/<api_version>/environment/44/runtime
-
-3	Create the artifact 
-POST https:<agility_ip>:8443/agility/api/<api_version>/solution/23/artifact
-
-Once we create above items then we can create solution. Using below call.
-POST project/{id}/solution
-
-This is the json format for creating solution.
-{
-  
-    "name": "TestSolutionSach0724",
-    "description": "lq8",
-    "parent": { "id": "1244" }
-  
-}
+	 * @return Create Solution has following steps. 1 Create Runtime in each env
+	 *         – To create run time each env we need to get the env first. Get
+	 *         Project call returns environments Array (["name" : "Development",
+	 *         "name" : "Production", "name" : "UAT/Stagin/Demo"]) . And from
+	 *         there we can take out the ENV (I think we will need the env ID)
+	 *         and create runtime. For now put a check in the Env if the Env is
+	 *         2 Create Runtime Command POST https:
+	 *         <agility_ip>:8443/agility/api/
+	 *         <api_version>/environment/44/runtime
+	 * 
+	 *         3 Create the artifact POST https:<agility_ip>:8443/agility/api/
+	 *         <api_version>/solution/23/artifact
+	 * 
+	 *         Once we create above items then we can create solution. Using
+	 *         below call. POST project/{id}/solution
+	 * 
+	 *         This is the json format for creating solution. {
+	 * 
+	 *         "name": "TestSolutionSach0724", "description": "lq8", "parent": {
+	 *         "id": "1244" }
+	 * 
+	 *         }
 	 */
 	@RequestMapping(value = "/createsolution", method = RequestMethod.POST, consumes = "application/json")
 	public ResponseEntity<?> createSolution(@RequestBody String solJson, HttpServletRequest req) {
-		
+
 		logger.debug("Received json data to create Solution : " + solJson);
-		
-		/*	----- JSON INPUT -----
-		{
-		 * 		   "ProjectID": "1244",
-		 		   "SolutionType": "",
-				   "SolutionName": "TestSolution",
-				   "ArtifactName": "TestArtifact",
-				   "T-ShirtSize": "Small"
+
+		JsonParser parser = new JsonParser();
+		JsonObject jsonObj = parser.parse(solJson).getAsJsonObject();
+		JsonPrimitive projectIDObj = jsonObj.getAsJsonPrimitive("ProjectID");
+		String projectID = projectIDObj.getAsString();
+		logger.debug("project id is " + projectID);
+		ResponseEntity entity = projectRestController.projectDetails(projectID);
+
+		if (entity.getStatusCode() == HttpStatus.OK) {
+			String response = (String) entity.getBody();
+			logger.debug("response is " + response);
+			if (response != null) {
+				JsonObject projectInfo = parser.parse(response).getAsJsonObject();
+				JsonArray envsObj = projectInfo.getAsJsonArray("environments");
+
+				for (int i = 0; i < envsObj.size(); i++) {
+					JsonObject environmentObject = envsObj.get(i).getAsJsonObject();
+					String environmentID = environmentObject.getAsJsonPrimitive("id").getAsString();
+
+					/**
+					 * Create runtime for this environment
+					 */
+
+					if (environmentID != null) {
+						ResponseEntity runtimeEntity = envRestController.createRuntime(environmentID);
+						logger.debug("Response from create runtime call is " + runtimeEntity.getBody());
+					}
 				}
-				
-		*/		
+			}
 
+		}
 
-		return null;
-	}		
-	
+		return entity;
+
+	}
+
 }
