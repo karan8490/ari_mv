@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import com.kpmg.mw.config.CommonConfigBean;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin
 public class LoginController {
 
 	@Autowired
@@ -99,9 +99,10 @@ public class LoginController {
 
 			HttpHeaders finalHeaders = new HttpHeaders();
 			finalHeaders.add("Set-Cookie", "JSESSIONID=" + JID);
-			finalHeaders.add("Access-Control-Allow-Origin", "*");
+			/*finalHeaders.add("Access-Control-Allow-Origin", "*");
 			finalHeaders.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-			finalHeaders.add("Access-Control-Allow-Headers", "*" );			
+			finalHeaders.add("Access-Control-Allow-Headers", "*" );
+			*/			
 
 			/**
 			 * Set response of user?ref and JID received from
